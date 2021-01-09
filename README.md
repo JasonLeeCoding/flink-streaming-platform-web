@@ -49,7 +49,7 @@ https://xie.infoq.cn/article/1af0cb75be056fea788e6c86b
 
 hadoop版本 2+ 
 
-flink 版本 1.12.0  官方地址: https://ci.apache.org/projects/flink/flink-docs-release-1.12/
+**flink 版本 1.12.0**  官方地址: https://ci.apache.org/projects/flink/flink-docs-release-1.12/
 
 jdk版本 jdk1.8
 
@@ -59,7 +59,7 @@ kafka版本 1.0+
 
 mysql版本 5.6+
 
-
+**一定 一定 一定 要到使用 flink 1.12.0 版本 其他版本都不行 **
 
 ### 2、应用安装
 
@@ -99,7 +99,7 @@ hdfs-site.xml
 
 
 
-b: /flink-1.11.1/lib  hadoop集成
+b: /flink-1.12.0/lib  hadoop集成
 
 
 
@@ -118,7 +118,7 @@ export HADOOP_CLASSPATH=`hadoop classpath`
 
 
 
-a:**下载最新版本** 并且解压 https://github.com/zhp8341/flink-streaming-platform-web/releases/
+  ##### a:**下载最新版本** 并且解压 https://github.com/zhp8341/flink-streaming-platform-web/releases/
 
 ~~~~
  tar -xvf   flink-streaming-platform-web.tar.gz
@@ -126,7 +126,7 @@ a:**下载最新版本** 并且解压 https://github.com/zhp8341/flink-streaming
 ~~~~
 
 
-b:执行mysql语句
+ ##### b:执行mysql语句
 
 ~~~~
 
@@ -139,22 +139,22 @@ mysql 版本5.6+以上
 
 ~~~~
 
-c:修改数据库连接配置
+  ##### c:修改数据库连接配置
 
 ~~~~
 /flink-streaming-platform-web/conf/application.properties  
 改成上面建好的mysql地址
 ~~~~
 
-**关于数据库连接配置 需要看清楚你 useSSL=true 你的mysql是否支持**
+**关于数据库连接配置 需要看清楚你 useSSL=true 你的mysql是否支持 如果不支持可以直接 useSSL=false**
 
 
-d:启动web
+  ##### d:启动web
 
 ~~~~
 cd  /XXXX/flink-streaming-platform-web/bin 
 
-一定要到bin目录下再执行
+
 
 启动 : sh deploy.sh  start
 
@@ -163,9 +163,10 @@ cd  /XXXX/flink-streaming-platform-web/bin
 日志目录地址： /XXXX/flink-streaming-platform-web/logs/
 
 ~~~~
+**一定 一定 一定 要到bin目录下再执行deploy.sh  否则无法启动**
 
 
-e:登录
+  ##### e:登录
 
 ~~~~
 http://${ip或者hostname}:9084/  如 : http://hadoop003:9084/
@@ -176,7 +177,7 @@ http://${ip或者hostname}:9084/  如 : http://hadoop003:9084/
 ~~~~
 
 
-f:集群
+  ##### f:集群
 
 如果需要集群部署模式 简单参考图
 
@@ -185,8 +186,25 @@ f:集群
 
 
 
- **备注：flink客户端必须和flink-streaming-platform-web应用部署在一起**
+ **备注：flink客户端必须和flink-streaming-platform-web应用部署在同一服务器**
+ 
+ 
+  ##### g:端口/内存修改
+ 
+ web端口修改 在conf下面的 application.properties 
+ 
+ **server.port参数 默认是9084**
+ 
+ jmx端口 在启动脚本 deploy.sh 里面
+ 
+ **默认是8999**
+ 
+ **debug端口 9901**
+ 
 
+jvm内存修改 都在deploy.sh
+
+**默认是按2G物理内存在分配jvm的  -Xmx1888M -Xms1888M -Xmn1536M -XX:MaxMetaspaceSize=512M -XX:MetaspaceSize=512M**
 
 
 
@@ -385,7 +403,7 @@ udf 开发demo 详见  [https://github.com/zhp8341/flink-streaming-udf](https://
 ```
 
 
-##以下语法是按照flink1.10写的 有时间重新写
+##以下语法是按照flink1.10写的  有时间重新写
 
 [demo1 单流kafka写入mysqld 参考 ](https://github.com/zhp8341/flink-streaming-platform-web/tree/master/docs/sql_demo/demo_1.md)
 
@@ -654,13 +672,19 @@ ${FLINK_HOME}/log/flink-${USER}-client-.log
 ##  七、RoadMap
 
 
-1、支持除官方以外的连接器  如：阿里云的sls
+1、 支持除官方以外的连接器  如：阿里云的sls
 
 2、 任务告警自动拉起
 
 3、 支持Application模式
 
-4、完善文档
+4、 完善文档 （持续过程）
+
+5、 支持sql预校验，编写sql的时候语法提示等友好的用户体验
+
+6、 checkpoint支持rocksDB
+
+7、 支持jar模式提交任务
 
 
 
@@ -675,6 +699,8 @@ http://img.ccblog.cn/flink/dd2.png
 微信二维码 http://img.ccblog.cn/flink/wx2.png
 
  [微信二维码](http://img.ccblog.cn/flink/wx2.png)
+ 
+ 
 
 
 
