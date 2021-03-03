@@ -36,16 +36,33 @@ start(){
          echo $pid
      if [ -z $pid ]
      then
-         echo "开始启动进程 $app_name "
+
+         echo "开始启动进程执行命令  java $JAVA_OPTS   -jar $project --spring.profiles.active=$env --spring.config.additional-location=../conf/application.properties  "
+        
           java $JAVA_OPTS   -jar $project --spring.profiles.active=$env --spring.config.additional-location=../conf/application.properties      >/dev/null 2>&1  &
           sleep 10
           pid=$(ps x | grep $app_name  | grep -v grep | awk '{print $1}')
-     else
 
+           if [ -z $pid ]
+           then
+              echo "启动应用进程失败 请手动执行一下  java  -jar $project --spring.profiles.active=$env --spring.config.additional-location=../conf/application.properties  "
+           else
+              echo "启动成功 pid=" $pid
+           fi
+
+           if [ -d "../logs/" ];then
+              echo "...........开始打印系统日志.............."
+              tail -fn 100  ../logs/info.log
+            else
+              echo "日志文件夹logs不存在"
+            fi
+
+
+     else
       echo " $app_name 进程已经存 pid=" $pid
      fi
 
-    echo "Start java end pid=" $pid
+
 }
 
 stop()
@@ -57,7 +74,7 @@ echo "------>Check pid of $app_name"
 
 if [ -z "$pid" ]
 then
-    echo "------>APP_NAME lication [$app_name] is already stopped"
+    echo "------>APP_NAME process [$app_name] is already stopped"
 else
     for pid in ${pid[*]}
     do
